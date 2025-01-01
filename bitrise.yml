@@ -41,4 +41,4 @@ workflows:
               
 
               # Run the Python script
-              python3 Ven.py || echo "Python script execution failed."
+              python3 Ven.py
