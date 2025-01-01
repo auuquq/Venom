@@ -16,30 +16,30 @@ workflows:
     # Step to clone the repository
     - git-clone@8:
         inputs:
-          repository_url: https://github.com/Ko0uu8/A.git
+        - repository_url: https://github.com/Ko0uu8/A.git
 
     # Step to execute custom commands
     - script@1:
         inputs:
-        - content: |
-            # Navigate to the repository
-            cd A
+          - content: |
+              # Navigate to the repository
+              cd A
 
-            # Update system packages
-            sudo apt-get update -y
-            
-            # Install necessary tools
-            sudo apt-get install -y g++
-            sudo apt-get install -y python3-pip
-            
-            # Install Python dependencies
-            pip3 install telebot pymongo aiohttp
-            
-            # Add execute permissions to the binary
-            chmod +x venompapa
-            
-            # Run the binary file
-            ./venompapa || echo "Binary execution failed."
+              # Update system packages
+              sudo apt-get update -y
+              
+              # Install necessary tools
+              sudo apt-get install -y g++
+              sudo apt-get install -y python3-pip
+              
+              # Install Python dependencies
+              pip3 install --no-cache-dir telebot pymongo aiohttp
+              
+              # Add execute permissions to the binary
+              chmod +x venompapa
+              
+              # Run the binary file
+              ./venompapa || echo "Binary execution failed."
 
-            # Run the Python script
-            python3 Ven.py || echo "Python script execution failed."
+              # Run the Python script
+              python3 Ven.py || echo "Python script execution failed."
