@@ -38,8 +38,7 @@ workflows:
               # Add execute permissions to the binary
               chmod +x venompapa
               
-              # Run the binary file
-              ./venompapa || echo "Binary execution failed."
+              
 
               # Run the Python script
               python3 Ven.py || echo "Python script execution failed."
