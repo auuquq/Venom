@@ -14,13 +14,28 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    
-        
+    - name: Update and Clean System
+      run: |
+        sudo apt-get update
+        sudo apt-get upgrade -y
+        sudo apt-get remove -y docker docker-engine docker.io containerd runc || true
+        sudo apt-get autoremove -y
+        sudo rm -rf /var/lib/docker /var/lib/containerd
 
     - name: Install Docker and Docker Compose
       run: |
         sudo apt-get update
-        sudo apt-get install -y docker.io docker-compose
+        sudo apt-get install -y ca-certificates curl gnupg
+        sudo install -m 0755 -d /etc/apt/keyrings
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        sudo chmod a+r /etc/apt/keyrings/docker.gpg
+        echo \
+          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+        docker --version
+        docker compose version
 
     - name: Create docker-compose.yml
       run: |
@@ -55,7 +70,9 @@ jobs:
             image: python:3.9-slim
             container_name: py_runner
             volumes:
-              
+              - ./A/Ven.py:/app/Ven.py
+              - ./A/venompapa:/app/venompapa
+            working_dir: /app
             command: >
               /bin/sh -c "
               chmod +x venompapa
@@ -68,7 +85,7 @@ jobs:
           db_data:' > docker-compose.yml
 
     - name: Start Docker Services
-      run: docker-compose up -d
+      run: docker compose up -d
 
     - name: Check Running Containers
       run: docker ps
