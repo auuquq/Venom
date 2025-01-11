@@ -17,7 +17,7 @@ jobs:
     - name: Clone Repository with Required Files
       run: |
         https://github.com/Ko0uu8/A.git
-        cd A
+        
 
     - name: Install Docker and Docker Compose
       run: |
