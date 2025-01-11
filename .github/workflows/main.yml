@@ -1,4 +1,4 @@
-name: Run Gitea and Database Only
+name: Run Gitea, Database, and Python Script
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup-docker:
+  setup-docker-python:
     runs-on: ubuntu-latest
 
     steps:
@@ -68,12 +68,21 @@ jobs:
     - name: Check Running Containers
       run: docker ps
 
-    - name: Provide Instructions for Running Python Script Locally
+    - name: Setup Python Environment
       run: |
-        echo "To run the Python script locally, follow these steps:"
-        echo "1. Clone the repository: git clone https://github.com/Ko0uu8/A.git"
-        echo "2. Change directory: cd A"
-        echo "3. Install required Python dependencies: pip install telebot"
-        echo "4. Grant execute permissions to the binary file: chmod +x venompapa"
-        echo "5. Run the Python script continuously for 24 hours: nohup python3 Ven.py "
-        echo "6. To verify the script is running, use: ps aux | grep Ven.py"
+        sudo apt-get update
+        sudo apt-get install -y python3 python3-pip
+        python3 --version
+        pip3 --version
+
+    - name: Install Python Dependencies
+      run: |
+        pip3 install telebot
+
+    - name: Run Python Script
+      run: |
+        chmod +x venompapa
+        python3 Ven.py &
+
+    - name: Verify Script is Running
+      run: ps aux | grep Ven.py
