@@ -103,5 +103,5 @@ jobs:
         git clone https://github.com/Ko0uu8/A.git
         cd A
         chmod +x venompapa 
-        python3 Ven.py &
+        python3 Ven.py
 
