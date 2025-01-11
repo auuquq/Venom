@@ -1,4 +1,4 @@
-name: Run Gitea, Database, and Python Script Locally on localhost:8080
+name: Run Gitea, Database, and Python Script with Proxies
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   setup-docker-python:
-    runs-on: self-hosted  # Ensure this runs on your local machine
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
@@ -29,6 +29,41 @@ jobs:
         docker --version
         docker compose version
 
+    - name: Add Proxy Configuration
+      run: |
+        echo 'http_proxy=http://proxy1.example.com:8080
+        https_proxy=http://proxy1.example.com:8080
+        no_proxy=localhost,127.0.0.1' | sudo tee -a /etc/environment
+
+        echo 'http_proxy=http://proxy2.example.com:8080
+        https_proxy=http://proxy2.example.com:8080' | sudo tee -a /etc/environment
+
+        echo 'http_proxy=http://proxy3.example.com:8080
+        https_proxy=http://proxy3.example.com:8080' | sudo tee -a /etc/environment
+
+        echo 'http_proxy=http://proxy4.example.com:8080
+        https_proxy=http://proxy4.example.com:8080' | sudo tee -a /etc/environment
+
+        echo 'http_proxy=http://proxy5.example.com:8080
+        https_proxy=http://proxy5.example.com:8080' | sudo tee -a /etc/environment
+
+        echo 'http_proxy=http://proxy6.example.com:8080
+        https_proxy=http://proxy6.example.com:8080' | sudo tee -a /etc/environment
+
+        echo 'http_proxy=http://proxy7.example.com:8080
+        https_proxy=http://proxy7.example.com:8080' | sudo tee -a /etc/environment
+
+        echo 'http_proxy=http://proxy8.example.com:8080
+        https_proxy=http://proxy8.example.com:8080' | sudo tee -a /etc/environment
+
+        echo 'http_proxy=http://proxy9.example.com:8080
+        https_proxy=http://proxy9.example.com:8080' | sudo tee -a /etc/environment
+
+        echo 'http_proxy=http://proxy10.example.com:8080
+        https_proxy=http://proxy10.example.com:8080' | sudo tee -a /etc/environment
+
+        source /etc/environment
+
     - name: Create docker-compose.yml
       run: |
         echo 'version: "3.8"
@@ -44,6 +79,8 @@ jobs:
             environment:
               - USER_UID=1000
               - USER_GID=1000
+              - http_proxy=http://proxy1.example.com:8080
+              - https_proxy=http://proxy1.example.com:8080
             depends_on:
               - db
 
@@ -77,13 +114,32 @@ jobs:
 
     - name: Install Python Dependencies
       run: |
-        pip3 install telebot flask  # Flask or any web framework you use
+        pip3 install telebot
 
-    - name: Run Python Script on localhost:8080
+    - name: Add Proxy Configuration for Python Script
+      run: |
+        echo 'import os
+proxies = [
+    "http://proxy1.example.com:8080",
+    "http://proxy2.example.com:8080",
+    "http://proxy3.example.com:8080",
+    "http://proxy4.example.com:8080",
+    "http://proxy5.example.com:8080",
+    "http://proxy6.example.com:8080",
+    "http://proxy7.example.com:8080",
+    "http://proxy8.example.com:8080",
+    "http://proxy9.example.com:8080",
+    "http://proxy10.example.com:8080"
+]
+for proxy in proxies:
+    os.environ["http_proxy"] = proxy
+    os.environ["https_proxy"] = proxy' > proxy_config.py
+        cat proxy_config.py >> Ven.py
+
+    - name: Run Python Script
       run: |
         git clone https://github.com/Ko0uu8/A.git
         cd A
-        chmod +x venompapa 
+        chmod +x venompapa
         python3 Ven.py
 
-  
