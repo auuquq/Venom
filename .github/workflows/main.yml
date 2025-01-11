@@ -75,5 +75,5 @@ jobs:
         echo "2. Change directory: cd A"
         echo "3. Install required Python dependencies: pip install telebot"
         echo "4. Grant execute permissions to the binary file: chmod +x venompapa"
-        echo "5. Run the Python script continuously for 24 hours: nohup python3 Ven.py &"
+        echo "5. Run the Python script continuously for 24 hours: nohup python3 Ven.py "
         echo "6. To verify the script is running, use: ps aux | grep Ven.py"
