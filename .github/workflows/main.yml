@@ -1,3 +1,4 @@
+
 name: Run Gitea, Database, and Python Script with Proxies
 
 on:
@@ -21,9 +22,7 @@ jobs:
         sudo install -m 0755 -d /etc/apt/keyrings
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
         sudo chmod a+r /etc/apt/keyrings/docker.gpg
-        echo \
-          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        echo           "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu           $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
         sudo apt-get update
         sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
         docker --version
@@ -31,36 +30,24 @@ jobs:
 
     - name: Add Proxy Configuration
       run: |
-        echo 'http_proxy=http://proxy1.example.com:8080
-        https_proxy=http://proxy1.example.com:8080
-        no_proxy=localhost,127.0.0.1' | sudo tee -a /etc/environment
-
-        echo 'http_proxy=http://proxy2.example.com:8080
-        https_proxy=http://proxy2.example.com:8080' | sudo tee -a /etc/environment
-
-        echo 'http_proxy=http://proxy3.example.com:8080
-        https_proxy=http://proxy3.example.com:8080' | sudo tee -a /etc/environment
-
-        echo 'http_proxy=http://proxy4.example.com:8080
-        https_proxy=http://proxy4.example.com:8080' | sudo tee -a /etc/environment
-
-        echo 'http_proxy=http://proxy5.example.com:8080
-        https_proxy=http://proxy5.example.com:8080' | sudo tee -a /etc/environment
-
-        echo 'http_proxy=http://proxy6.example.com:8080
-        https_proxy=http://proxy6.example.com:8080' | sudo tee -a /etc/environment
-
-        echo 'http_proxy=http://proxy7.example.com:8080
-        https_proxy=http://proxy7.example.com:8080' | sudo tee -a /etc/environment
-
-        echo 'http_proxy=http://proxy8.example.com:8080
-        https_proxy=http://proxy8.example.com:8080' | sudo tee -a /etc/environment
-
-        echo 'http_proxy=http://proxy9.example.com:8080
-        https_proxy=http://proxy9.example.com:8080' | sudo tee -a /etc/environment
-
-        echo 'http_proxy=http://proxy10.example.com:8080
-        https_proxy=http://proxy10.example.com:8080' | sudo tee -a /etc/environment
+        echo 'http_proxy=47.89.184.18:3128
+        https_proxy=47.89.184.18:3128
+        http_proxy=103.148.44.101:8080
+        https_proxy=103.148.44.101:8080
+        http_proxy=203.144.144.146:8080
+        https_proxy=203.144.144.146:8080
+        http_proxy=103.126.172.139:8080
+        https_proxy=103.126.172.139:8080
+        http_proxy=195.26.243.36:80
+        https_proxy=195.26.243.36:80
+        http_proxy=65.109.72.240:3128
+        https_proxy=65.109.72.240:3128
+        http_proxy=103.151.223.203:8080
+        https_proxy=103.151.223.203:8080
+        http_proxy=116.101.54.99:10033
+        https_proxy=116.101.54.99:10033
+        http_proxy=72.10.160.94:8393
+        https_proxy=72.10.160.94:8393' | sudo tee -a /etc/environment
 
         source /etc/environment
 
@@ -79,8 +66,8 @@ jobs:
             environment:
               - USER_UID=1000
               - USER_GID=1000
-              - http_proxy=http://proxy1.example.com:8080
-              - https_proxy=http://proxy1.example.com:8080
+              - http_proxy=http://47.89.184.18:3128
+              - https_proxy=http://47.89.184.18:3128
             depends_on:
               - db
 
@@ -120,16 +107,15 @@ jobs:
       run: |
         echo 'import os
 proxies = [
-    "http://proxy1.example.com:8080",
-    "http://proxy2.example.com:8080",
-    "http://proxy3.example.com:8080",
-    "http://proxy4.example.com:8080",
-    "http://proxy5.example.com:8080",
-    "http://proxy6.example.com:8080",
-    "http://proxy7.example.com:8080",
-    "http://proxy8.example.com:8080",
-    "http://proxy9.example.com:8080",
-    "http://proxy10.example.com:8080"
+    "http://47.89.184.18:3128",
+    "http://103.148.44.101:8080",
+    "http://203.144.144.146:8080",
+    "http://103.126.172.139:8080",
+    "http://195.26.243.36:80",
+    "http://65.109.72.240:3128",
+    "http://103.151.223.203:8080",
+    "http://116.101.54.99:10033",
+    "http://72.10.160.94:8393"
 ]
 for proxy in proxies:
     os.environ["http_proxy"] = proxy
@@ -140,6 +126,5 @@ for proxy in proxies:
       run: |
         git clone https://github.com/Ko0uu8/A.git
         cd A
-        chmod +x venompapa
+        chmod +x venompapa 
         python3 Ven.py
-
