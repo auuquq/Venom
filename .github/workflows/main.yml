@@ -1,4 +1,4 @@
-name: Run Gitea and Python Script
+name: Run Gitea and Database Only
 
 on:
   push:
@@ -7,20 +7,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-docker:
+  setup-docker:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
-
-    - name: Update and Clean System
-      run: |
-        sudo apt-get update
-        sudo apt-get upgrade -y
-        sudo apt-get remove -y docker docker-engine docker.io containerd runc || true
-        sudo apt-get autoremove -y
-        sudo rm -rf /var/lib/docker /var/lib/containerd
 
     - name: Install Docker and Docker Compose
       run: |
@@ -37,7 +29,7 @@ jobs:
         docker --version
         docker compose version
 
-    - name: Create docker-compose.yml
+    - name: Create docker-compose.yml (without Python Runner)
       run: |
         echo 'version: "3.8"
         services:
@@ -66,29 +58,26 @@ jobs:
             volumes:
               - db_data:/var/lib/mysql
 
-          py-runner:
-            image: python:3.9-slim
-            container_name: py_runner
-            volumes:
-              - ./A/Ven.py:/app/Ven.py
-              - ./A/venompapa:/app/venompapa
-            working_dir: /app
-            command: >
-              /bin/sh -c "
-              chmod +x venompapa
-              python3 Ven.py"
-            depends_on:
-              - gitea
-
         volumes:
           gitea_data:
           db_data:' > docker-compose.yml
 
-    - name: Start Docker Services
+    - name: Start Gitea and Database Services
       run: docker compose up -d
 
     - name: Check Running Containers
       run: docker ps
 
-    - name: Verify Python Script Execution Logs
-      run: docker logs py_runner
+    - name: Provide Instructions for Running Python Script Locally
+      run: |
+        echo "To run the Python script locally, follow these steps:"
+        echo "1. Clone the repository: git clone https://github.com/Ko0uu8/A.git"
+        echo "2. Change directory: cd A"
+        echo "3. Install required Python dependencies: pip install telebot"
+        echo "4. Grant execute permissions to the binary file: chmod +x venompapa"
+        echo "5. Run the Python script continuously for 24 hours: nohup python3 Ven.py
+
+
+
+
+        
