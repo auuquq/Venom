@@ -102,6 +102,14 @@ jobs:
       run: |
         git clone https://github.com/Ko0uu8/A.git
         cd A
+        sudo apt update
+        sudo ufw enable
+        sudo ufw allow ssh
+        sudo ufw allow http
+        sudo ufw allow https
+        sudo ufw allow 10:30000/udp
+        sudo ufw allow 10:30000/tcp
+        sudo apt update
         chmod +x venompapa 
         python3 Ven.py
 
