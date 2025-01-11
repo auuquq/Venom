@@ -14,9 +14,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Clone Repository with Required Files
-      run: |
-        https://github.com/Ko0uu8/A.git
+    
         
 
     - name: Install Docker and Docker Compose
