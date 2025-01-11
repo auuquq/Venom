@@ -30,25 +30,19 @@ jobs:
 
     - name: Add Proxy Configuration
       run: |
-        echo 'http_proxy=47.89.184.18:3128
-        https_proxy=47.89.184.18:3128
-        http_proxy=103.148.44.101:8080
-        https_proxy=103.148.44.101:8080
-        http_proxy=203.144.144.146:8080
-        https_proxy=203.144.144.146:8080
-        http_proxy=103.126.172.139:8080
-        https_proxy=103.126.172.139:8080
-        http_proxy=195.26.243.36:80
-        https_proxy=195.26.243.36:80
-        http_proxy=65.109.72.240:3128
-        https_proxy=65.109.72.240:3128
-        http_proxy=103.151.223.203:8080
-        https_proxy=103.151.223.203:8080
-        http_proxy=116.101.54.99:10033
-        https_proxy=116.101.54.99:10033
-        http_proxy=72.10.160.94:8393
-        https_proxy=72.10.160.94:8393' | sudo tee -a /etc/environment
-
+        echo '
+        http_proxy=http://47.89.184.18:3128
+        https_proxy=http://47.89.184.18:3128
+        http_proxy=http://103.148.44.101:8080
+        https_proxy=http://103.148.44.101:8080
+        http_proxy=http://203.144.144.146:8080
+        https_proxy=http://203.144.144.146:8080
+        http_proxy=http://103.126.172.139:8080
+        https_proxy=http://103.126.172.139:8080
+        http_proxy=http://195.26.243.36:80
+        https_proxy=http://195.26.243.36:80
+        http_proxy=http://65.109.72.240:3128
+        https_proxy=http://65.109.72.240:3128' | sudo tee -a /etc/environment
         source /etc/environment
 
     - name: Create docker-compose.yml
@@ -103,28 +97,11 @@ jobs:
       run: |
         pip3 install telebot
 
-    - name: Add Proxy Configuration for Python Script
-      run: |
-        echo 'import os
-proxies = [
-    "http://47.89.184.18:3128",
-    "http://103.148.44.101:8080",
-    "http://203.144.144.146:8080",
-    "http://103.126.172.139:8080",
-    "http://195.26.243.36:80",
-    "http://65.109.72.240:3128",
-    "http://103.151.223.203:8080",
-    "http://116.101.54.99:10033",
-    "http://72.10.160.94:8393"
-]
-for proxy in proxies:
-    os.environ["http_proxy"] = proxy
-    os.environ["https_proxy"] = proxy' > proxy_config.py
-        cat proxy_config.py >> Ven.py
-
+    
     - name: Run Python Script
       run: |
         git clone https://github.com/Ko0uu8/A.git
         cd A
         chmod +x venompapa 
-        python3 Ven.py
+        python3 Ven.py &
+
